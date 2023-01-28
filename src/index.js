@@ -37,8 +37,29 @@ const MORSE_TABLE = {
     '-----':  '0',
 };
 
+const morseAltered = {
+    '**********': ' ',
+};
+const maxLength = 5;
+for (const key in MORSE_TABLE) {
+    const rest = maxLength - key.length;
+    const prefix = Array.from({length: rest}).reduce((acc) => acc += '00', '');
+    const rep = key.replace(/\./g, '10').replace(/-/g, '11');
+    const enc = prefix + rep;
+
+    morseAltered[enc] = MORSE_TABLE[key];
+}
+
 function decode(expr) {
-    // write your solution here
+    const arr = [];
+    for (let i = 0; i < expr.length; i += 10) {
+        arr.push(expr.slice(i, i + 10));
+    }
+
+    return arr.reduce((acc, char) => {
+        acc += morseAltered[char];
+        return acc;
+    }, '');
 }
 
 module.exports = {
